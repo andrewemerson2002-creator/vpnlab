@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>Sign in and checkout</title>
+  <style>
+    body { font-family: sans-serif; max-width: 520px; margin: 2em auto; }
+    label { display: block; margin-top: .8em; }
+    input { width: 100%; padding: .4em; box-sizing: border-box; }
+    button { margin-top: 1em; padding: .5em 1.5em; }
+    .done { color: green; }
+  </style>
+</head>
+<body>
+  <h2>Sign in</h2>
+  <form onsubmit="this.querySelector('.done').hidden = false; return false;">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password">
+    <button type="submit">Sign in</button>
+    <p class="done" hidden>Done. Nothing was sent.</p>
+  </form>
+
+  <h2>Search</h2>
+  <form role="search" onsubmit="this.querySelector('.done').hidden = false; return false;">
+    <label for="search">Search products</label>
+    <input id="search" name="q" type="search">
+    <button type="submit">Search</button>
+    <p class="done" hidden>Done. Nothing was sent.</p>
+  </form>
+
+  <h2>Checkout</h2>
+  <form onsubmit="this.querySelector('.done').hidden = false; return false;">
+    <label for="name">Full name</label>
+    <input id="name" name="name" autocomplete="name">
+    <label for="addr">Street address</label>
+    <input id="addr" name="address" autocomplete="street-address">
+    <label for="card">Card number</label>
+    <input id="card" name="cardnumber" autocomplete="cc-number" inputmode="numeric">
+    <button type="submit">Pay</button>
+    <p class="done" hidden>Done. Nothing was sent.</p>
+  </form>
+</body>
+</html>
