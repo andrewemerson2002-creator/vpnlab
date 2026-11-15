@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><title>WebRTC check</title>
+  <style>body { font-family: sans-serif; max-width: 640px; margin: 2em auto; } li { font-family: monospace; }</style>
+</head>
+<body>
+  <h1>WebRTC check</h1>
+  <p>IP seen over HTTPS (should be the VPN's): <b id="httpip">checking…</b></p>
+  <p>ICE candidates (the <b>srflx</b> line is the public IP a STUN server sees):</p>
+  <ul id="candidates"></ul>
+  <p id="status">Gathering…</p>
+  <script>
+    fetch('https://api.ipify.org?format=json')
+      .then(r => r.json()).then(j => { document.getElementById('httpip').textContent = j.ip; })
+      .catch(() => { document.getElementById('httpip').textContent = 'failed'; });
+
+    const list = document.getElementById('candidates');
+    const pc = new RTCPeerConnection({ iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] });
+    pc.createDataChannel('probe');
+    pc.onicecandidate = e => {
+      if (!e.candidate) { document.getElementById('status').textContent = 'Done.'; return; }
+      const c = e.candidate, li = document.createElement('li');
+      li.textContent = c.type + '  ' + (c.address || '(hidden)') + '  ' + c.protocol;
+      if (c.type === 'srflx') li.style.fontWeight = 'bold';
+      list.appendChild(li);
+    };
+    pc.createOffer().then(o => pc.setLocalDescription(o));
+    setTimeout(() => { document.getElementById('status').textContent = 'Done (timeout).'; }, 10000);
+  </script>
+</body>
+</html>
